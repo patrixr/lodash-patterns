@@ -1,6 +1,6 @@
 # Lodash Patterns
 
-Mini pattern matching tool matching using lodash. Written in typescript
+Mini pattern matching tool leveraging lodash methods. Written in typescript
 
 ## Installation
 
