@@ -4,6 +4,7 @@
   "description": "Pattern matching using lodash",
   "main": "index.js",
   "types": "./index.ts",
+  "repository": "patrixr/lodash-patterns",
   "scripts": {
     "build": "tsc",
     "prepublish": "npm run build",
@@ -20,8 +21,8 @@
       "ts-node/register"
     ]
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Patrick R",
+  "license": "MIT",
   "devDependencies": {
     "@types/lodash": "^4.14.168",
     "ava": "^3.15.0",
