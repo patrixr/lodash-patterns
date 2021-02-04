@@ -31,9 +31,9 @@ const detectErrorType = matcher(
 const errorType = detectErrorType({ message: 'unknown' })
 ```
 
-## Negative matchers
+### Negative matchers
 
-### `when.not(...)`
+#### `when.not(...)`
 
 ```typescript
 import { matcher, when } from '../index'
@@ -69,13 +69,12 @@ import { when, matcher, otherwise, use } from 'lodash-patterns'
 
 const movieOf = matcher(
   [when("isEqual", "john travolta"), use("pulp fiction")],
-  [when("isEqual", "tom hanks"), use("forrest gump")],
   [when("isEqual", "tom hanks"), use("the terminal")],
   [when("isEqual", "morgan freeman"), use("shawshank")],
   otherwise(use('no movie found'))
 )
 
-const errorType = detectErrorType("oh no")
+const movie = movieOf("tom hanks")
 ```
 
 Available aliases:
