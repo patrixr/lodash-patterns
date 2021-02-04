@@ -25,7 +25,9 @@ type PredicateMethod = (
   'isSet'             | 'isString'      |
   'isSymbol'          | 'isTypedArray'  |
   'isUndefined'       | 'isWeakMap'     |
-  'isWeakSet' 
+  'isWeakSet'         | 'thru'          |
+  'conformsTo'        | 'conforms'      |
+  'stubTrue'          | 'stubFalse'
 ) & keyof LoDashStatic
 
 // -----------------------------
@@ -48,17 +50,63 @@ type Tail<T> = T extends [any, ...infer U] ? U : []
 
 type TailArgs<F extends AnyFunction> = Tail<ArgumentsOf<F>>
 
+type LodashArgs<FuncKey extends PredicateMethod> = TailArgs<LoDashStatic[FuncKey]>
+
 // -----------------------------
 //  Pattern Matching API
 // -----------------------------
 
-export function when<T, M extends PredicateMethod>(
-  method: M,
-  ...args: TailArgs<LoDashStatic[typeof method]>
-) : WhenPredicate<T> {
+/**
+ * Creates a predicate based on (some) lodash methods
+ *
+ * @export
+ * @template T
+ * @template M
+ * @param {M} method
+ * @param {...LodashArgs<typeof method>} args
+ * @returns {WhenPredicate<T>}
+ */
+export function when<T, M extends PredicateMethod>(method: M, ...args: LodashArgs<typeof method>) : WhenPredicate<T> {
   return (el : T) => Boolean((_ as any)[method](el, ...args))
 }
 
+/**
+ * Creates a negative predicate based on (some) lodash methods
+ *
+ * @template T
+ * @template M
+ * @param {M} method
+ * @param {...LodashArgs<typeof method>} args
+ * @returns {WhenPredicate<T>}
+ */
+when.not = <T, M extends PredicateMethod>(method: M, ...args: LodashArgs<typeof method>) : WhenPredicate<T> => {
+  const positive = when(method, ...args);
+  return (el : T) => !positive(el);
+}
+
+
+/**
+ * Creates a fallback match condition
+ *
+ * @export
+ * @template In
+ * @template Out
+ * @param {ValueResolver<In, Out>} resolver
+ * @returns {MatchCondition<In, Out>}
+ */
+export function otherwise<In, Out>(resolver: ValueResolver<In, Out>) : MatchCondition<In, Out> {
+  return [() => true, resolver];
+}
+
+/**
+ * Create a pattern matching function
+ *
+ * @export
+ * @template In
+ * @template Out
+ * @param {...MatchCondition<In, Out>[]} args
+ * @returns {Matcher<In, Out>}
+ */
 export function matcher<In, Out>(...args: MatchCondition<In, Out>[]) : Matcher<In, Out> {
   return (el: In) => {
     for (let matcher of args) {
@@ -73,4 +121,11 @@ export function matcher<In, Out>(...args: MatchCondition<In, Out>[]) : Matcher<I
   }
 }
 
-export default { when, matcher }
+export const good   = () => true
+export const bad    = () => false
+export const no     = bad
+export const yes    = good
+export const value  = <T>(val: T) => () => val
+export const use    = value
+
+export default { when, matcher, otherwise, good, bad, no, yes, value }
