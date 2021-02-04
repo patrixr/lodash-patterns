@@ -122,7 +122,7 @@ await exec(['commit', 'doX', 'doY'])
 await exec(1) // throws
 ```
 
-#### React
+#### React + Recursion
 
 ```javascript
 import _ from 'lodash'
