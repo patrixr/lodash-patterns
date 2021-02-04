@@ -4,6 +4,8 @@
 
 Mini pattern matching tool leveraging lodash methods. Written in typescript
 
+![](./patterns.png)
+
 ## Installation
 
 Note: Lodash is not included in the module, and has to be installed separately
