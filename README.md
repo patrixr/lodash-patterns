@@ -46,7 +46,6 @@ const isRecordValid = matcher(
 ```
 
 ### Language helpers
-
 #### `otherwise(resolver)`
 
 ```typescript
@@ -102,6 +101,56 @@ Available aliases:
 - `yes`
 - `no`
 
+
+### More examples
+#### Command Runner
+
+```typescript
+import { when, matcher, otherwise } from 'lodash-patterns'
+
+const exec = matcher(
+  [when("eq", "commit"),  ()    => fetch('/commit')],
+  [when("isString"),      (act) => fetch(`/action/${act}`)]
+  [when("isArray"),       (arr) => Promise.all(arr.map(exec))],
+  otherwise(
+    () => throw 'invalid command'
+  )
+)
+
+await exec('commit')
+await exec(['commit', 'doX', 'doY'])
+await exec(1) // throws
+```
+
+#### React
+
+```javascript
+import _ from 'lodash'
+import { when, matcher, use, otherwie } from 'lodash-patterns'
+
+function Component({ data }) {
+  const schema = { movies: _.isArray }
+
+  const show = matcher(
+    [when('isArray'), (arr) => (
+      <div>{ arr.map(show) }</div>
+    )],
+    [when.not("isObject", use(
+      <div> Invalid Data </div>
+    )],
+    [when.not('conformsTo', schema), use(
+      <div>Invalid Schema</div>
+    )],
+    otherwise(use(
+      <ul>
+        { data.movies.map(...) }
+      </ul>
+    )
+  )
+
+  return show(data);
+}
+```
 ## Development
 
 ### Install dependencies
