@@ -1,5 +1,7 @@
 # Lodash Patterns
 
+![](https://github.com/patrixr/strapi-middleware-cache/workflows/Test%20and%20Publish/badge.svg) 
+
 Mini pattern matching tool leveraging lodash methods. Written in typescript
 
 ## Installation
@@ -111,3 +113,4 @@ npm install
 ```bash
 npm run test
 ```
+

@@ -1,6 +1,6 @@
 {
   "name": "lodash-patterns",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Pattern matching using lodash",
   "main": "index.js",
   "types": "./index.ts",
